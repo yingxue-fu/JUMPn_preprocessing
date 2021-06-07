@@ -53,6 +53,9 @@ DE_results$BH_adjusted_P_value <- DE_results$aov_P_value %>%
 DE_protein_index <- (apply(abs(DE_results[,1:3]), 1, max) > 0.5) & 
                     (as.numeric(DE_results$BH_adjusted_P_value) < 0.01)
 DE_protein_expression_matrix <- tcell_proteomics[DE_protein_index,]
+# output the data used for JUMPn
+write.csv(DE_protein_expression_matrix, 
+          file = "output/DE_protein_expression_matrix.csv", row.names = F)
 
 #################### coefficient of variation (CV) calculation #################
 # CV calculation
@@ -60,3 +63,6 @@ prot_exp_cv <- apply(tcell_proteomics_mx, 1, function(x) sd(x) / mean(x))
 # choose top 20% proteins with largest CV
 cv_top20_index <- prot_exp_cv > quantile(prot_exp_cv, 0.8)
 CVtop20_protein_expression_matrix <- tcell_proteomics[cv_top20_index,]
+# output the data used for JUMPn
+write.csv(CVtop20_protein_expression_matrix, 
+          file = "output/CVtop20_protein_expression_matrix.csv", row.names = F)
