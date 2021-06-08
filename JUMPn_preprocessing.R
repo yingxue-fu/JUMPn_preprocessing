@@ -30,8 +30,8 @@ DE_results$lgfc_0h_8h <- foldchange(mean8h, mean0h) %>%
 DE_results$lgfc_0h_16h <- foldchange(mean16h, mean0h) %>% 
                           foldchange2logratio(base=2) %>% round(2)
 # calculate aov and extract P-values
-n_progteins <- dim(tcell_proteomics_mx)[1]
-for (i in 1:n_progteins) {
+n_proteins <- dim(tcell_proteomics_mx)[1]
+for (i in 1:n_proteins) {
   # data
   p <- data.frame(expression_value = tcell_proteomics_mx[i,],
                   group = as.factor(rep(c("0h", "2h", "8h", "16h"), each = 2)))
@@ -41,9 +41,9 @@ for (i in 1:n_progteins) {
   DE_results$aov_P_value[i] <- summary(p_aov)[[1]][["Pr(>F)"]][1] %>% 
                                 formatC(digits = 1, format = "e")
   # show progress
-  progress(i, max.value = n_progteins)
+  progress(i, max.value = n_proteins)
   Sys.sleep(0.01)
-  if (i == n_progteins) message("Done!")
+  if (i == n_proteins) message("Done!")
 }
 # adjust P-values for multiple comparisons
 DE_results$BH_adjusted_P_value <- DE_results$aov_P_value %>% 
